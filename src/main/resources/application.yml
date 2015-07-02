@@ -1,0 +1,3 @@
+kinesis:
+  stream: default
+  region: us-east-1

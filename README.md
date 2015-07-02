@@ -1,48 +1,21 @@
-Ratpack project template
------------------------------
+Kenisis Router
+--------------
 
-You have just created a basic Groovy Ratpack application. It doesn't do much
-at this point, but we have set you up with a standard project structure, a 
-Guice back Registry, simple home page, and Spock for writing tests (because 
-you'd be mad not to use it).
+This will route data `POST`ed to the `/data` endpoint to the specified AWS Kinesis queue
 
-In this project you get:
+The default port is 8080
 
-* A Gradle build file with pre-built Gradle wrapper
-* A tiny home page at src/ratpack/templates/index.html (it's a template)
-* A routing file at src/ratpack/Ratpack.groovy
-* Reloading enabled in build.gradle
-* A standard project structure:
+Running
 
-    <proj>
-      |
-      +- src
-          |
-          +- ratpack
-          |     |
-          |     +- Ratpack.groovy
-          |     +- ratpack.properties
-          |     +- public // Static assets in here
-          |          |
-          |          +- images
-          |          +- lib
-          |          +- scripts
-          |          +- styles
-          |
-          +- main
-          |   |
-          |   +- groovy
-                   |
-                   +- // App classes in here!
-          |
-          +- test
-              |
-              +- groovy
-                   |
-                   +- // Spock tests in here!
+    java -Dratpack.kinesis.stream=yolo \
+         -Dratpack.kinesis.region=us-west-1 \
+         -jar build/libs/kinesis-router-all.jar
 
-That's it! You can start the basic app with
+Checking that it is running
 
-    ./gradlew run
+    http POST localhost:8080/health
 
-but it's up to you to add the bells, whistles, and meat of the application.
+Posting data
+
+    http POST localhost:8080/data < yourfile.dat
+

@@ -1,18 +1,29 @@
-import ratpack.groovy.template.MarkupTemplateModule
+import org.zirbes.kinesis.router.handlers.KinesisErrorHandler
+import org.zirbes.kinesis.router.modules.KinesisModule
+import org.zirbes.kinesis.router.KinesisActionChain
 
-import static ratpack.groovy.Groovy.groovyMarkupTemplate
+import ratpack.config.ConfigData
+import ratpack.error.ServerErrorHandler
+import ratpack.jackson.JacksonModule
+
 import static ratpack.groovy.Groovy.ratpack
 
 ratpack {
-  bindings {
-    module MarkupTemplateModule
-  }
-
-  handlers {
-    get {
-      render groovyMarkupTemplate("index.gtpl", title: "My Ratpack App")
+    serverConfig {
+        port 8080
     }
-
-    assets "public"
-  }
+    bindings {
+        ConfigData configData = ConfigData.of()
+                .yaml(ClassLoader.getSystemResource('application.yml'))
+                .env()
+                .sysProps()
+                .build()
+        bindInstance(ConfigData, configData)
+        bindInstance(ServerErrorHandler, new KinesisErrorHandler())
+        add new KinesisModule(configData.get('/kinesis', Object))
+        add JacksonModule
+    }
+    handlers {
+        handler chain(registry.get(KinesisActionChain))
+    }
 }
