@@ -2,27 +2,20 @@ package org.zirbes.kinesis.router.filters
 
 import groovy.transform.CompileStatic
 
-import java.security.SecureRandom
-import java.util.Random
-
 /**
- * Percentage filter.
+ * Passthrough no-op filter.
  */
 @CompileStatic
-class RateFilter implements DataFilter {
+class OpenFilter implements DataFilter {
 
-    final Double rate
-    final Random random = new SecureRandom()
-
-    RateFilter(Double rate) {
-        this.rate = rate
-    }
+    @Override FilterType getType() { FilterType.OPEN }
 
     @Override
     byte[] filter(byte[] data) {
-        double dice = random.nextDouble()
-        if (dice <= rate) { return data }
-        return [] as byte[]
+        return data
     }
+
+    @Override
+    String toString() { type }
 
 }

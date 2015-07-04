@@ -8,6 +8,8 @@ import groovy.transform.CompileStatic
 @CompileStatic
 interface DataFilter {
 
+    FilterType getType()
+
     /**
      * Inspect data, return an empty byte array if it shouldn't go through.
      */

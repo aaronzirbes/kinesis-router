@@ -1,4 +1,5 @@
 import org.zirbes.kinesis.router.handlers.KinesisErrorHandler
+import org.zirbes.kinesis.router.modules.FilterModule
 import org.zirbes.kinesis.router.modules.KinesisModule
 import org.zirbes.kinesis.router.KinesisActionChain
 
@@ -20,6 +21,7 @@ ratpack {
                 .build()
         bindInstance(ConfigData, configData)
         bindInstance(ServerErrorHandler, new KinesisErrorHandler())
+        add new FilterModule(configData.get('/filter', Object))
         add new KinesisModule(configData.get('/kinesis', Object))
         add JacksonModule
     }
